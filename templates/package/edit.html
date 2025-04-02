@@ -1,0 +1,84 @@
+{% extends "../base.html" %}
+
+{% block body %}
+   <!-- component sections starts  -->
+   <div class="conponentSection p-5 sm:ml-64 bg-gray-200">
+    <div class="componentWrapper">
+          <!-- Entry Form starts  -->
+    <div class="formSection bg-white p-4 rounded shadow-md mb-4">
+        <h3 class="text-2xl font-bold mb-4">Edit Package Form</h3>
+        <form class="grid grid-cols-3 gap-4" method="post">
+          {% csrf_token %}
+          <!-- Col 1 -->
+          <div class="grid gap-2">
+            <!-- Name -->
+            <input class="border w-full p-4 leading-tight bg-slate-100" name="name" type="text" placeholder="Name"
+              required value={{package.name}} />
+            <!-- Price -->
+            <input class="border w-full p-4 leading-tight bg-slate-100" name="price" type="number" placeholder="Price"
+              required value={{package.price}}  />
+          </div>
+          <!-- Col 2 -->
+          <div class="grid gap-2">
+            <!-- Payment Frequency  -->
+            <select name="paymentFreq" class="border w-full p-4 leading-tight bg-slate-100">
+              {% for payT in FREQUENCY_CHOICES %}
+                  <option {% if package.frequency == payT.0 %}selected{% endif %} value="{{payT.0}}">{{payT.1}}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <!-- Col 3 -->
+          <div class="grid gap-2">
+            <!-- Description -->
+            <textarea class="border w-full p-4 leading-tight bg-slate-100" name="desc" placeholder="Description"
+              required>{{package.desc}}</textarea>
+          </div>
+          <!-- Schedule -->
+          <div class="col-span-2">
+            <span class="font-semibold mb-1 inline-block">Select Schedule</span>
+            <select name="schedule" multiple class="border w-full p-4 leading-tight bg-slate-100 h-52">
+                <optgroup label="Selected">
+                  {% for ch in package.get_schedules  %}                               
+                      <option selected value="{{ch.id}}">{{ch}}</option>
+                  {% endfor %}                          
+                </optgroup>
+                <optgroup label="All">
+                {% for schedule in schedules %}
+                        <option value="{{schedule.id}}">{{schedule}}</option>
+                {% endfor %}
+                </optgroup>
+            </select>
+          </div>
+          <!-- Equipment Type  -->
+          <div>
+            <span class="font-semibold mb-1 inline-block">Select Equipment Types</span>
+            <select name="eqType" class="border w-full p-4 leading-tight bg-slate-100 h-52" multiple>
+              <optgroup label="Selected">
+                {% for eq in package.get_equipmentTypes  %}                               
+                    <option selected value="{{eq.id}}">{{eq.name}}</option>
+                {% endfor %}                          
+              </optgroup>
+              <optgroup label="All">
+              {% for eq in eqTypes %}
+                      <option value="{{eq.id}}">{{eq.name}}</option>
+              {% endfor %}
+              </optgroup>
+            </select>
+          </div>
+          <div class="col-span-2">
+            <button
+              class="bg-blue-900 text-white font-bold py-2 px-4 w-full"
+              type="submit">
+              Update
+            </button>
+        </div>
+        <div>
+            <a href="{% url "package:delete" package.id %}" class="bg-red-900 text-white font-bold py-2 px-4 w-full inline-block text-center cursor-pointer">
+                Delete Package
+            </a>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock body %}

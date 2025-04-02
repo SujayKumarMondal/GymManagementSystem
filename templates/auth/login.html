@@ -1,0 +1,76 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="{% static 'img/favicon_ico.ico' %}">
+  <title>No Excuses Fitness</title>
+
+  <!-- tailwind cdn  -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+</head>
+
+<body>
+  <main>
+    <section>
+      <div class="sm:flex gap-2 min-h-screen">
+        <!-- Left Side -->
+        <div class="info w-full bg-blue-900 grid justify-center items-center py-8">
+          <div class="grid text-center gap-2 text-white">
+            <div class="w-40 h-40 mx-auto">
+              <img class="w-full h-full rounded-full object-cover"
+                src="https://images.pexels.com/photos/1229356/pexels-photo-1229356.jpeg?auto=compress&cs=tinysrgb&w=600"
+                alt="">
+            </div>
+            <h2 class="text-4xl font-bold">No Excuses Fitness</h2>
+            <h4 class="text-xl">Gym Management System</h4>
+            <p class="text-sm">For Call/Whatsapp or emergency assistance: <a class="underline" href="tel:017XXXXX973">8617228703</a></p>
+            <p class="text-sm">For Email assistance: <a class="underline" href="mailto:hiiiamsujay12@gmail.com">hiiiamsujay12@gmail.com</a></p>
+          </div>
+        </div>
+        <!-- Right Side -->
+        <div class="login w-full grid items-center">
+          <!-- Form -->
+          <form class="px-8 pt-6 pb-8 mb-4" method="post">
+            {% csrf_token %}
+            <div class="icon w-full text-center mb-4">
+              <i class='bx bx-user text-6xl text-blue-900'></i>
+              <h3 class="text-2xl font-bold">
+                Sign In
+              </h3>
+              {% for message in messages %}
+              <div class="py-4 text-red-600 font-bold text-center">
+                  {{message}}
+              </div>
+          {% endfor %}
+            </div>
+            <div class="mb-4">
+              <input
+                class="border w-full p-4 leading-tight bg-slate-100"
+                name="username" type="text" placeholder="Username" required />
+            </div>
+            <div class="mb-6">
+              <input
+                class="border w-full p-4 leading-tight bg-slate-100"
+                name="password" type="password" placeholder="Password" required />
+            </div>
+            <div class="w-full">
+              <button
+                class="bg-blue-900 text-white font-bold py-2 px-4 w-full"
+                type="submit">
+                Sign In
+              </button>
+            </div>
+            <a href="{% url "coachDashboard" %}" class="py-2 underline cursor-pointer inline-block">View as coach</pa>
+          </form>
+        </div>
+    </section>
+  </main>
+</body>
+
+</html>

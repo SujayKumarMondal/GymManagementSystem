@@ -1,0 +1,110 @@
+{% extends "../base.html" %}
+{% load custom_filters %}
+
+{% block body %}
+   <!-- component sections starts  -->
+   <div class="conponentSection p-5 sm:ml-64 bg-gray-200">
+    <div class="componentWrapper">
+        <!-- Entry Form starts  -->
+        <div class="formSection bg-white p-4 rounded shadow-md mb-4">
+            <div class="flex justify-between">
+                <h3 class="text-2xl font-bold mb-4">Member Details</h3>
+            </div>
+            <form class="grid grid-cols-3 gap-4" method="post">
+                {% csrf_token %}
+                <!-- Col 1 -->
+                <div class="grid gap-2">
+                    <!-- Member Id -->
+                    <input class="border w-full p-4 leading-tight bg-slate-100 disabled:cursor-not-allowed disabled:bg-slate-300" name="memId" type="text" placeholder="Member Id" disabled value="{{member.memberId}}" />
+                    <!-- Name -->
+                    <input class="border w-full p-4 leading-tight bg-slate-100" name="name" type="text" placeholder="Name" required value="{{member.name}}" />
+                    <!-- NID -->
+                    <input class="border w-full p-4 leading-tight bg-slate-100" name="nid" type="text" placeholder="NID" required value="{{member.nid}}" />
+                </div>
+                <!-- Col 2 -->
+                <div class="grid gap-2">
+                    <!-- Phone -->
+                    <input class="border w-full p-4 leading-tight bg-slate-100" name="phone" type="tel" placeholder="Phone" required value="{{member.phone}}" />                 
+                    <!-- Reference -->
+                    <input class="border w-full p-4 leading-tight bg-slate-100" name="ref" type="text" value="{{member.ref}}" />                     
+                </div>
+                <!-- Col 3 -->
+                <div class="grid gap-3">      
+                     <!-- Package  -->
+                     <select name="package" class="border w-full p-4 leading-tight bg-slate-100">
+                      <option hidden>Select a package</option>
+                      {% for package in packages %}
+                        <option {% if package.id == member.package.id %}selected{% endif %} value="{{package.id}}">{{package.name}}</option>
+                      {% endfor %}
+                    </select>     
+                    <!-- Address -->
+                    <textarea class="border w-full p-4 leading-tight bg-slate-100" name="address" placeholder="Address" required >{{member.address}}</textarea>
+                </div>
+                <div class="col-span-2">
+                    <button
+                      class="bg-blue-900 text-white font-bold py-2 px-4 w-full"
+                      type="submit">
+                      Update
+                    </button>
+                </div>
+                <div>
+                    {% if member.status %}
+                        <a href="{% url "member:deactivate"  member.id %}" class="bg-yellow-900 text-white font-bold py-2 px-4 w-full inline-block text-center cursor-pointer">
+                            Deactivate Member
+                        </a>
+                        {% else %}
+                        <a href="{% url "member:active"  member.id %}" class="bg-green-900 text-white font-bold py-2 px-4 w-full inline-block text-center cursor-pointer">
+                            Activate Member
+                        </a>
+                    {% endif %}
+                </div>
+                {% comment %} <div>
+                    <a href="{% url "member:delete" member.id %}" class="bg-red-900 text-white font-bold py-2 px-4 w-full inline-block text-center cursor-pointer">
+                        Delete Member
+                    </a>
+                </div> {% endcomment %}
+            </form>
+        </div>
+          <!-- Transaction History -->
+          <section class="bg-gray-50 w-full p-4 shadow-xl rounded-md mt-4">
+            <div class="flex justify-between">
+                <h3 class="text-2xl font-bold">Monthly Transaction History</h3>
+                <span>
+                    {% if member.due_payment < 0 %}
+                    Total Advanced: 
+                    {{ member.due_payment|abs_val }} 
+                      {% else %}
+                      Total Due: 
+                      {{member.due_payment}}
+                    {% endif %}
+                    Rupees ({{month}})
+                </span>
+            </div>
+            <div class="relative overflow-x-auto mt-4">
+                <table class="w-full">
+                    <thead class="text-sm uppercase bg-blue-900 text-gray-50 text-center">
+                        <tr>
+                            <th scope="col" class="px-6 py-3">Month</th>
+                            <th scope="col" class="px-6 py-3">Reason</th>
+                            <th scope="col" class="px-6 py-3">Total Amount</th>
+                            <th scope="col" class="px-6 py-3">Payed Amount</th>
+                            <th scope="col" class="px-6 py-3">Due Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for bill in bills %}
+                        <tr class="bg-white border text-sm text-center">
+                            <td class="px-6 py-4"><a class="underline" href="{% url "member:payment_history" member.id bill.month bill.year %}">{{bill.month}}</a></td>
+                            <td class="px-6 py-4">{{bill.reason}}</td>
+                            <td class="px-6 py-4">{{bill.total_amount}}</td>
+                            <td class="px-6 py-4">{{bill.payed_amount}}</td>
+                            <td class="px-6 py-4"><a class="underline" href="{% url "member:bill" %}">{{bill.due_amount}}</a</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+  </div>
+{% endblock body %}

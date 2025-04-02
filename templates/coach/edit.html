@@ -1,0 +1,148 @@
+{% extends "../base.html" %}
+
+{% block body %}
+   <!-- component sections starts  -->
+   <div class="conponentSection p-5 sm:ml-64 bg-gray-200">
+    <div class="componentWrapper">
+        <!-- Form starts  -->
+        <div class="formSection bg-white px-10 py-8 rounded shadow-md mb-4">
+            <h3 class="text-2xl font-bold mb-4">Edit Coach</h3>
+            <form class="grid grid-cols-3 gap-4" method="post">
+                {% csrf_token %}
+                <!-- Col 1 -->
+                <div class="grid gap-2">       
+                    <!-- Coach ID -->
+                    <input class="border w-full p-4 leading-tight bg-slate-100 disabled:cursor-not-allowed disabled:bg-slate-300" name="empId" type="text" placeholder="Coach ID" disabled value={{coach.coachId}} />
+                    <!-- Name -->
+                    <input class="border w-full p-4 leading-tight bg-slate-100" name="name" type="text" placeholder="Name" required value="{{coach.name}}" />
+                    <!-- Salary -->
+                    <input class="border w-full p-4 leading-tight bg-slate-100" name="salary" type="number" placeholder="Salary" required value={{coach.salary}} />
+                </div>
+                <!-- Col 2 -->
+                <div class="grid gap-2">   
+                    <!-- Phone -->
+                    <input class="border w-full p-4 leading-tight bg-slate-100" name="phone" type="tel" placeholder="Phone" required value={{coach.phone}} />
+                    <!-- NID -->
+                    <input class="border w-full p-4 leading-tight bg-slate-100" name="nid" type="text" placeholder="NID" required value={{coach.nid}} />
+                </div>
+                <!-- Col 3 -->
+                <div class="grid gap-2">            
+                    <!-- Address -->
+                    <textarea class="border w-full p-4 leading-tight bg-slate-100" name="address" placeholder="Address" required >{{coach.address}}</textarea>
+                     <!-- Reference -->
+                     <input class="border w-full p-4 leading-tight bg-slate-100" name="ref" type="text" placeholder="Refrence" value={{coach.ref}} />    
+                </div>
+                <!-- Schedule -->
+                <div class="col-span-3">
+                    <span class="font-semibold mb-1 inline-block">Select Schedule</span>
+                    <select name="schedule" multiple class="border w-full p-4 leading-tight bg-slate-100">
+                        <optgroup label="Selected">
+                            {% for schedule in coach.get_schedules  %}                               
+                                <option selected value="{{schedule.id}}">{{schedule}}</option>
+                            {% endfor %}                          
+                        </optgroup>
+                        <optgroup label="All">
+                        {% for schedule in schedules %}
+                                 <option value="{{schedule.id}}">{{schedule}}</option>
+                        {% endfor %}
+                        </optgroup>
+                      </select>
+                </div>
+                <div>
+                    <button
+                      class="bg-blue-900 text-white font-bold py-2 px-4 w-full"
+                      type="submit">
+                      Update
+                    </button>
+                </div>
+                <div>
+                    {% if coach.status %}
+                        <a href="{% url "coach:deactivate"  coach.id %}" class="bg-yellow-900 text-white font-bold py-2 px-4 w-full inline-block text-center cursor-pointer">
+                            Suspend Coach
+                        </a>
+                        {% else %}
+                        <a href="{% url "coach:active"  coach.id %}" class="bg-green-900 text-white font-bold py-2 px-4 w-full inline-block text-center cursor-pointer">
+                            Activate Coach
+                        </a>
+                {% endif %}
+                </div>
+                <div>
+                    <a href="{% url "coach:delete" coach.id %}" class="bg-red-900 text-white font-bold py-2 px-4 w-full inline-block text-center cursor-pointer">
+                        Delete Coach
+                    </a>
+                </div>
+            </form>
+        </div>
+         <!-- Attendance -->
+         <section class="bg-gray-50 w-full p-4 shadow-xl rounded-md mt-4">
+            <div class="flex justify-between">
+                <h3 class="text-2xl font-bold">Attendance</h3>
+            </div>
+            <div class="relative overflow-x-auto mt-4">
+                <table class="w-full">
+                    <thead class="text-sm uppercase bg-blue-900 text-gray-50 text-center">
+                        <tr>
+                            <th scope="col" class="px-6 py-3">Serial</th>
+                            <th scope="col" class="px-6 py-3">Attendance Status</th>
+                            <th scope="col" class="px-6 py-3">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for att in attendance %}
+                        <tr class="bg-white border text-sm text-center">
+                            <td class="px-6 py-4">{{att.date}}</td>
+                            <td class="px-6 py-4">
+                                {% if att.attendance %}
+                                    Present
+                                    {% else %}
+                                    Absent
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a class="underline" href="{% url "coach:attendance" coach.id att.id %}">
+                                {% if att.attendance %}
+                                    Mark as absent
+                                    {% else %}
+                                    Mark as present
+                                {% endif %}
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+         <!-- Transaction -->
+         <section class="bg-gray-50 w-full p-4 shadow-xl rounded-md mt-4">
+            <div class="flex justify-between">
+                <h3 class="text-2xl font-bold">Salary History</h3>
+                <span>Due Salary: {{coach.due}} Rupees</span>
+            </div>
+            <div>
+               Join Date: {{coach.join_date}}
+            </div>
+            <div class="relative overflow-x-auto mt-4">
+                <table class="w-full">
+                    <thead class="text-sm uppercase bg-blue-900 text-gray-50 text-center">
+                        <tr>
+                            <th scope="col" class="px-6 py-3">Date</th>
+                            <th scope="col" class="px-6 py-3">Amount</th>
+                            <th scope="col" class="px-6 py-3">Reason</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for salary in salaries %}
+                        <tr class="bg-white border text-sm text-center">
+                            <td class="px-6 py-4">{{salary.date}}</td>
+                            <td class="px-6 py-4">{{salary.amount}}</td>
+                            <td> {{salary.reason}} </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+  </div>
+{% endblock body %}
