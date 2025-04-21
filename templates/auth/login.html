@@ -1,76 +1,109 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full w-full scroll-smooth bg-gradient-to-tr from-purple-700 via-blue-800 to-indigo-900">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/x-icon" href="{% static 'img/favicon_ico.ico' %}">
-  <title>No Excuses Fitness</title>
-
-  <!-- tailwind cdn  -->
+  <title>No Excuses Fitness - Login</title>
+  <link rel="icon" href="{% static 'img/favicon_ico.ico' %}" type="image/x-icon">
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css" />
+  <style>
+    .glass {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+    }
 
-  <link rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+    .neon-button {
+      background: linear-gradient(90deg, #4f46e5, #9333ea, #ec4899);
+      background-size: 200% auto;
+      transition: background-position 0.5s;
+    }
+
+    .neon-button:hover {
+      background-position: right center;
+      box-shadow: 0 0 20px #9333ea;
+    }
+
+    .floating-label input:focus + label,
+    .floating-label input:not(:placeholder-shown) + label {
+      transform: translateY(-1.5rem);
+      font-size: 0.8rem;
+      color: #4f46e5;
+    }
+
+    .floating-label label {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      transition: all 0.2s ease-in-out;
+      pointer-events: none;
+    }
+  </style>
 </head>
 
-<body>
-  <main>
-    <section>
-      <div class="sm:flex gap-2 min-h-screen">
-        <!-- Left Side -->
-        <div class="info w-full bg-blue-900 grid justify-center items-center py-8">
-          <div class="grid text-center gap-2 text-white">
-            <div class="w-40 h-40 mx-auto">
-              <img class="w-full h-full rounded-full object-cover"
-                src="https://images.pexels.com/photos/1229356/pexels-photo-1229356.jpeg?auto=compress&cs=tinysrgb&w=600"
-                alt="">
-            </div>
-            <h2 class="text-4xl font-bold">No Excuses Fitness</h2>
-            <h4 class="text-xl">Gym Management System</h4>
-            <p class="text-sm">For Call/Whatsapp or emergency assistance: <a class="underline" href="tel:017XXXXX973">8617228703</a></p>
-            <p class="text-sm">For Email assistance: <a class="underline" href="mailto:hiiiamsujay12@gmail.com">hiiiamsujay12@gmail.com</a></p>
-          </div>
-        </div>
-        <!-- Right Side -->
-        <div class="login w-full grid items-center">
-          <!-- Form -->
-          <form class="px-8 pt-6 pb-8 mb-4" method="post">
-            {% csrf_token %}
-            <div class="icon w-full text-center mb-4">
-              <i class='bx bx-user text-6xl text-blue-900'></i>
-              <h3 class="text-2xl font-bold">
-                Sign In
-              </h3>
-              {% for message in messages %}
-              <div class="py-4 text-red-600 font-bold text-center">
-                  {{message}}
-              </div>
-          {% endfor %}
-            </div>
-            <div class="mb-4">
-              <input
-                class="border w-full p-4 leading-tight bg-slate-100"
-                name="username" type="text" placeholder="Username" required />
-            </div>
-            <div class="mb-6">
-              <input
-                class="border w-full p-4 leading-tight bg-slate-100"
-                name="password" type="password" placeholder="Password" required />
-            </div>
-            <div class="w-full">
-              <button
-                class="bg-blue-900 text-white font-bold py-2 px-4 w-full"
-                type="submit">
-                Sign In
-              </button>
-            </div>
-            <a href="{% url "coachDashboard" %}" class="py-2 underline cursor-pointer inline-block">View as coach</pa>
-          </form>
-        </div>
-    </section>
-  </main>
-</body>
+<body class="h-full w-full flex items-center justify-center p-6">
 
+  <div class="w-full max-w-6xl rounded-2xl overflow-hidden shadow-2xl grid grid-cols-1 lg:grid-cols-2 glass">
+
+    <!-- Left Panel -->
+    <div class="flex flex-col items-center justify-center p-10 text-white text-center bg-gradient-to-tr from-indigo-900 via-purple-900 to-blue-900">
+      <div class="animate-pulse mb-6">
+        <img src="https://images.pexels.com/photos/1229356/pexels-photo-1229356.jpeg?auto=compress&cs=tinysrgb&w=600"
+             class="w-32 h-32 object-cover rounded-full border-4 border-white shadow-lg" />
+      </div>
+      <h2 class="text-4xl font-extrabold mb-2">No Excuses Fitness</h2>
+      <p class="text-xl font-medium mb-4">Gym Management System</p>
+      <p class="text-sm">Call/WhatsApp: <a href="tel:8617228703" class="underline">8617228703</a></p>
+      <p class="text-sm">Email: <a href="mailto:hiiiamsujay12@gmail.com" class="underline">hiiiamsujay12@gmail.com</a></p>
+    </div>
+
+    <!-- Login Form Panel -->
+    <div class="bg-white/20 p-10 flex flex-col justify-center glass">
+      <form method="post" class="space-y-8 relative">
+        {% csrf_token %}
+        <div class="text-center">
+          <i class='bx bxs-user-circle text-6xl text-indigo-800 animate-bounce'></i>
+          <h2 class="text-2xl font-bold text-gray-800 mt-2">Welcome Back</h2>
+          <p class="text-sm text-gray-600">Sign in to continue</p>
+        </div>
+
+        {% for message in messages %}
+          <div class="text-center text-red-600 font-semibold text-sm">{{ message }}</div>
+        {% endfor %}
+
+        <!-- Username -->
+        <div class="floating-label relative">
+          <input type="text" name="username" placeholder=" " required
+            class="w-full p-4 rounded bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 peer" />
+          <label class="peer-placeholder-shown:text-gray-500">Username</label>
+        </div>
+
+        <!-- Password -->
+        <div class="floating-label relative">
+          <input type="password" name="password" placeholder=" " required
+            class="w-full p-4 rounded bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 peer" />
+          <label class="peer-placeholder-shown:text-gray-500">Password</label>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit"
+          class="neon-button w-full text-white font-bold py-3 px-4 rounded-lg shadow-md text-lg transition duration-300">
+          Sign In
+        </button>
+
+        <!-- Extra -->
+        <div class="text-center pt-4">
+          <a href="{% url 'coachDashboard' %}" class="text-blue-700 hover:underline text-sm font-medium">
+            View as Coach
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</body>
 </html>
